@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MrBeast 2026 Video Rankings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --accent-gold: #ffd93d;
+            --accent-red: #ff6b6b;
+            --accent-green: #6bffb8;
+            --accent-blue: #6bb3ff;
+            --accent-purple: #a78bfa;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .page-break {
+            page-break-after: always;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-red));
+            border-radius: 2px;
+        }
+
+        .header.purple::before {
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+        }
+
+        .header h1 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .header .meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Key Insights */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .insight-card {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 16px;
+            border-left: 3px solid;
+        }
+
+        .insight-card.gold { border-color: var(--accent-gold); }
+        .insight-card.green { border-color: var(--accent-green); }
+        .insight-card.red { border-color: var(--accent-red); }
+        .insight-card.purple { border-color: var(--accent-purple); }
+
+        .insight-card h4 {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .insight-card .value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .insight-card .desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            padding: 14px 20px;
+            background: var(--bg-card);
+            border-radius: 10px;
+            margin-bottom: 24px;
+            font-size: 0.8rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.avg { background: var(--text-secondary); }
+        .legend-dot.jimmy { background: var(--accent-gold); }
+        .legend-dot.std { background: var(--accent-purple); }
+
+        /* Video List */
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .video-card {
+            background: var(--bg-card);
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: grid;
+            grid-template-columns: 38px 1fr auto;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .video-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(255,255,255,0.05);
+        }
+
+        .video-card.bottom {
+            background: rgba(255, 107, 107, 0.08);
+            border-color: rgba(255, 107, 107, 0.15);
+        }
+
+        .video-card.bottom:hover {
+            background: rgba(255, 107, 107, 0.12);
+        }
+
+        .rank-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .rank-badge.gold {
+            background: linear-gradient(135deg, #ffd93d 0%, #ffb347 100%);
+            color: #000;
+        }
+
+        .rank-badge.silver {
+            background: linear-gradient(135deg, #e8e8e8 0%, #b8b8b8 100%);
+            color: #000;
+        }
+
+        .rank-badge.bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #a0522d 100%);
+            color: #fff;
+        }
+
+        .rank-badge.top {
+            background: rgba(107, 255, 184, 0.15);
+            color: var(--accent-green);
+        }
+
+        .rank-badge.mid {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+        }
+
+        .rank-badge.bottom {
+            background: rgba(255, 107, 107, 0.2);
+            color: var(--accent-red);
+        }
+
+        .rank-badge.controversial {
+            background: rgba(167, 139, 250, 0.15);
+            color: var(--accent-purple);
+        }
+
+        .video-info h3 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            line-height: 1.3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .stats-pills {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .pill {
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.7rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .pill.avg {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
+        }
+
+        .pill.jimmy {
+            background: rgba(255, 217, 61, 0.12);
+            color: var(--accent-gold);
+        }
+
+        .pill.std {
+            background: rgba(167, 139, 250, 0.12);
+            color: var(--accent-purple);
+        }
+
+        .pill.range {
+            background: rgba(107, 179, 255, 0.12);
+            color: var(--accent-blue);
+        }
+
+        /* Page 2 specific */
+        .controversy-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .controversy-header .icon {
+            font-size: 1.5rem;
+        }
+
+        .controversy-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .methodology-note {
+            background: var(--bg-card);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border-left: 3px solid var(--accent-purple);
+        }
+
+        .methodology-note h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--accent-purple);
+        }
+
+        .methodology-note p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .video-card {
+                grid-template-columns: 34px 1fr;
+            }
+            .stats-pills {
+                grid-column: 1 / -1;
+                margin-top: 6px;
+            }
+            .video-info h3 {
+                white-space: normal;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PAGE 1: Expected Performance Rankings -->
+    <div class="page page-break">
+        <header class="header">
+            <h1>MrBeast 2026 Video Rankings</h1>
+            <p class="subtitle">Team predictions for main channel performance (90-day views)</p>
+            <div class="meta">
+                <div class="meta-item">
+                    <span>👥</span>
+                    <span><strong>7</strong> Respondents</span>
+                </div>
+                <div class="meta-item">
+                    <span>🎬</span>
+                    <span><strong>28</strong> Video Concepts</span>
+                </div>
+                <div class="meta-item">
+                    <span>📅</span>
+                    <span>December 2025</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Key Insights -->
+        <div class="insights-grid">
+            <div class="insight-card gold">
+                <h4>Jimmy's #1 Pick</h4>
+                <div class="value">50 Streamers Fight</div>
+                <div class="desc">Team ranked it #3 overall</div>
+            </div>
+            <div class="insight-card green">
+                <h4>Consensus #1</h4>
+                <div class="value">Beat Messi</div>
+                <div class="desc">Avg rank 2.9</div>
+            </div>
+            <div class="insight-card red">
+                <h4>Clear Pattern</h4>
+                <div class="value">Philanthropy Lower</div>
+                <div class="desc">All 4 charity videos bottom 5</div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-dot avg"></div>
+                <span>Avg = Team average rank (1 = best)</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot jimmy"></div>
+                <span>Jimmy = Jimmy's ranking</span>
+            </div>
+        </div>
+
+        <!-- Full Rankings -->
+        <div class="video-list">
+            <div class="video-card">
+                <div class="rank-badge gold">1</div>
+                <div class="video-info"><h3>Beat Messi, Win $100,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 2.9</span>
+                    <span class="pill jimmy">Jimmy: #4</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge silver">2</div>
+                <div class="video-info"><h3>30 Streamers vs 30 YouTubers For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 3.6</span>
+                    <span class="pill jimmy">Jimmy: #3</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge bronze">3</div>
+                <div class="video-info"><h3>50 Streamers Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 6.0</span>
+                    <span class="pill jimmy">Jimmy: #1</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge top">4</div>
+                <div class="video-info"><h3>50 Famous Athletes Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 6.0</span>
+                    <span class="pill jimmy">Jimmy: #5</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge top">5</div>
+                <div class="video-info"><h3>Beat LeBron, Win $100,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 6.9</span>
+                    <span class="pill jimmy">Jimmy: #10</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge top">6</div>
+                <div class="video-info"><h3>Climbed Mount Everest!</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 7.7</span>
+                    <span class="pill jimmy">Jimmy: #6</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge top">7</div>
+                <div class="video-info"><h3>50 YouTube Legends Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 8.3</span>
+                    <span class="pill jimmy">Jimmy: #8</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge top">8</div>
+                <div class="video-info"><h3>30 Celebrities Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 8.7</span>
+                    <span class="pill jimmy">Jimmy: #9</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge top">9</div>
+                <div class="video-info"><h3>Drive Around Earth In Lamborghini, Keep It</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 9.1</span>
+                    <span class="pill jimmy">Jimmy: #2</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge top">10</div>
+                <div class="video-info"><h3>Lose 150LBs Together, Win $250,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 10.6</span>
+                    <span class="pill jimmy">Jimmy: #7</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">11</div>
+                <div class="video-info"><h3>I Trapped 1,000 People In A Circle</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 11.7</span>
+                    <span class="pill jimmy">Jimmy: #11</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">12</div>
+                <div class="video-info"><h3>I Stranded 100 People On An Island</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 12.7</span>
+                    <span class="pill jimmy">Jimmy: #13</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">13</div>
+                <div class="video-info"><h3>Last To Leave Mansion Keeps It</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 13.0</span>
+                    <span class="pill jimmy">Jimmy: #15</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">14</div>
+                <div class="video-info"><h3>Eat Everything In A Grocery Store, Win $250,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 13.1</span>
+                    <span class="pill jimmy">Jimmy: #19</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">15</div>
+                <div class="video-info"><h3>Survive 30 Days Stranded With Your Ex, Win $300,000!</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 13.3</span>
+                    <span class="pill jimmy">Jimmy: #18</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">16</div>
+                <div class="video-info"><h3>Survive 30 Days In The Wilderness With Your Ex, Win $300,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 14.7</span>
+                    <span class="pill jimmy">Jimmy: #14</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">17</div>
+                <div class="video-info"><h3>I Stranded 100 People In The Wilderness</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 15.3</span>
+                    <span class="pill jimmy">Jimmy: #12</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">18</div>
+                <div class="video-info"><h3>Last To Leave Grocery Store, Wins $500,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 16.0</span>
+                    <span class="pill jimmy">Jimmy: #17</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">19</div>
+                <div class="video-info"><h3>Trapped On An Island Until I Build A Sailboat</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 18.3</span>
+                    <span class="pill jimmy">Jimmy: #16</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">20</div>
+                <div class="video-info"><h3>Ages 1-100 Race For $250,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 18.6</span>
+                    <span class="pill jimmy">Jimmy: #20</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">21</div>
+                <div class="video-info"><h3>$1 vs $1,000,000,000 Futuristic Tech</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 18.7</span>
+                    <span class="pill jimmy">Jimmy: #23</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">22</div>
+                <div class="video-info"><h3>Survive 30 Days Chained To A Stranger, Win $300,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 20.6</span>
+                    <span class="pill jimmy">Jimmy: #21</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge mid">23</div>
+                <div class="video-info"><h3>1000 People Circle 2</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 23.6</span>
+                    <span class="pill jimmy">Jimmy: #27</span>
+                </div>
+            </div>
+            <div class="video-card bottom">
+                <div class="rank-badge bottom">24</div>
+                <div class="video-info"><h3>I Saved 100 People From Cancer</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 24.0</span>
+                    <span class="pill jimmy">Jimmy: #22</span>
+                </div>
+            </div>
+            <div class="video-card bottom">
+                <div class="rank-badge bottom">25</div>
+                <div class="video-info"><h3>1000 People Circle 3</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 24.4</span>
+                    <span class="pill jimmy">Jimmy: #28</span>
+                </div>
+            </div>
+            <div class="video-card bottom">
+                <div class="rank-badge bottom">26</div>
+                <div class="video-info"><h3>Rescuing 500 Kids From Illegal Child Labor</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 25.7</span>
+                    <span class="pill jimmy">Jimmy: #25</span>
+                </div>
+            </div>
+            <div class="video-card bottom">
+                <div class="rank-badge bottom">27</div>
+                <div class="video-info"><h3>I Built A Village In Africa</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 26.0</span>
+                    <span class="pill jimmy">Jimmy: #24</span>
+                </div>
+            </div>
+            <div class="video-card bottom">
+                <div class="rank-badge bottom">28</div>
+                <div class="video-info"><h3>I Built 10 Schools Around the World</h3></div>
+                <div class="stats-pills">
+                    <span class="pill avg">Avg: 26.6</span>
+                    <span class="pill jimmy">Jimmy: #26</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Rankings predict 90-day view performance · Lower rank = higher expected views</p>
+        </footer>
+    </div>
+
+    <!-- PAGE 2: Controversy Rankings -->
+    <div class="page">
+        <header class="header purple">
+            <h1>Most Controversial Videos</h1>
+            <p class="subtitle">Ranked by standard deviation of team rankings</p>
+            <div class="meta">
+                <div class="meta-item">
+                    <span>📊</span>
+                    <span>Higher σ = More disagreement</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Methodology Note -->
+        <div class="methodology-note">
+            <h4>📐 Methodology: Standard Deviation</h4>
+            <p>Standard deviation measures how spread out the rankings are from the average. A video with σ = 6.79 means rankings were highly dispersed (some loved it, some didn't), while σ = 1.05 means near-unanimous agreement.</p>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-dot std"></div>
+                <span>σ = Standard deviation</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot avg"></div>
+                <span>Avg = Team average rank</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot jimmy"></div>
+                <span>Range = Min to Max ranking</span>
+            </div>
+        </div>
+
+        <!-- Controversy Rankings -->
+        <div class="video-list">
+            <div class="video-card">
+                <div class="rank-badge controversial">1</div>
+                <div class="video-info"><h3>Eat Everything In A Grocery Store, Win $250,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 6.79</span>
+                    <span class="pill avg">Avg: 13.1</span>
+                    <span class="pill range">5→24</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">2</div>
+                <div class="video-info"><h3>Last To Leave Grocery Store, Wins $500,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 6.12</span>
+                    <span class="pill avg">Avg: 16.0</span>
+                    <span class="pill range">2→21</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">3</div>
+                <div class="video-info"><h3>Climbed Mount Everest!</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 6.04</span>
+                    <span class="pill avg">Avg: 7.7</span>
+                    <span class="pill range">1→20</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">4</div>
+                <div class="video-info"><h3>I Trapped 1,000 People In A Circle</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 5.47</span>
+                    <span class="pill avg">Avg: 11.7</span>
+                    <span class="pill range">5→23</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">5</div>
+                <div class="video-info"><h3>$1 vs $1,000,000,000 Futuristic Tech</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 5.23</span>
+                    <span class="pill avg">Avg: 18.7</span>
+                    <span class="pill range">8→24</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">6</div>
+                <div class="video-info"><h3>50 YouTube Legends Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 5.06</span>
+                    <span class="pill avg">Avg: 8.3</span>
+                    <span class="pill range">1→15</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">7</div>
+                <div class="video-info"><h3>Last To Leave Mansion Keeps It</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 5.01</span>
+                    <span class="pill avg">Avg: 13.0</span>
+                    <span class="pill range">6→22</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">8</div>
+                <div class="video-info"><h3>Survive 30 Days Stranded With Your Ex, Win $300,000!</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 4.98</span>
+                    <span class="pill avg">Avg: 13.3</span>
+                    <span class="pill range">4→18</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">9</div>
+                <div class="video-info"><h3>I Stranded 100 People In The Wilderness</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 4.49</span>
+                    <span class="pill avg">Avg: 15.3</span>
+                    <span class="pill range">9→22</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">10</div>
+                <div class="video-info"><h3>I Stranded 100 People On An Island</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 4.46</span>
+                    <span class="pill avg">Avg: 12.7</span>
+                    <span class="pill range">6→21</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">11</div>
+                <div class="video-info"><h3>Drive Around Earth In Lamborghini, Keep It</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 4.45</span>
+                    <span class="pill avg">Avg: 9.1</span>
+                    <span class="pill range">2→17</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">12</div>
+                <div class="video-info"><h3>Lose 150LBs Together, Win $250,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 3.85</span>
+                    <span class="pill avg">Avg: 10.6</span>
+                    <span class="pill range">4→16</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">13</div>
+                <div class="video-info"><h3>50 Streamers Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 3.51</span>
+                    <span class="pill avg">Avg: 6.0</span>
+                    <span class="pill range">1→12</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">14</div>
+                <div class="video-info"><h3>1000 People Circle 2</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 3.46</span>
+                    <span class="pill avg">Avg: 23.6</span>
+                    <span class="pill range">17→27</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">15</div>
+                <div class="video-info"><h3>1000 People Circle 3</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 3.42</span>
+                    <span class="pill avg">Avg: 24.4</span>
+                    <span class="pill range">19→28</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">16</div>
+                <div class="video-info"><h3>30 Celebrities Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 3.41</span>
+                    <span class="pill avg">Avg: 8.7</span>
+                    <span class="pill range">5→15</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">17</div>
+                <div class="video-info"><h3>50 Famous Athletes Fight For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 3.07</span>
+                    <span class="pill avg">Avg: 6.0</span>
+                    <span class="pill range">3→11</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">18</div>
+                <div class="video-info"><h3>Beat LeBron, Win $100,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 2.80</span>
+                    <span class="pill avg">Avg: 6.9</span>
+                    <span class="pill range">3→10</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">19</div>
+                <div class="video-info"><h3>30 Streamers vs 30 YouTubers For $1,000,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 2.77</span>
+                    <span class="pill avg">Avg: 3.6</span>
+                    <span class="pill range">1→10</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">20</div>
+                <div class="video-info"><h3>Trapped On An Island Until I Build A Sailboat</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 2.37</span>
+                    <span class="pill avg">Avg: 18.3</span>
+                    <span class="pill range">14→21</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">21</div>
+                <div class="video-info"><h3>Survive 30 Days Chained To A Stranger, Win $300,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 2.19</span>
+                    <span class="pill avg">Avg: 20.6</span>
+                    <span class="pill range">17→24</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">22</div>
+                <div class="video-info"><h3>Survive 30 Days In The Wilderness With Your Ex, Win $300,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 2.05</span>
+                    <span class="pill avg">Avg: 14.7</span>
+                    <span class="pill range">13→19</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">23</div>
+                <div class="video-info"><h3>Ages 1-100 Race For $250,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 1.84</span>
+                    <span class="pill avg">Avg: 18.6</span>
+                    <span class="pill range">16→22</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">24</div>
+                <div class="video-info"><h3>Rescuing 500 Kids From Illegal Child Labor</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 1.67</span>
+                    <span class="pill avg">Avg: 25.7</span>
+                    <span class="pill range">23→28</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">25</div>
+                <div class="video-info"><h3>Beat Messi, Win $100,000</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 1.36</span>
+                    <span class="pill avg">Avg: 2.9</span>
+                    <span class="pill range">1→4</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">26</div>
+                <div class="video-info"><h3>I Saved 100 People From Cancer</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 1.31</span>
+                    <span class="pill avg">Avg: 24.0</span>
+                    <span class="pill range">22→25</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">27</div>
+                <div class="video-info"><h3>I Built A Village In Africa</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 1.20</span>
+                    <span class="pill avg">Avg: 26.0</span>
+                    <span class="pill range">24→28</span>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="rank-badge controversial">28</div>
+                <div class="video-info"><h3>I Built 10 Schools Around the World</h3></div>
+                <div class="stats-pills">
+                    <span class="pill std">σ: 1.05</span>
+                    <span class="pill avg">Avg: 26.6</span>
+                    <span class="pill range">25→28</span>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>Higher standard deviation = more disagreement among 7 team members</p>
+        </footer>
+    </div>
+</body>
+</html>
