@@ -757,7 +757,7 @@
         // Try to auto-load data.csv on page load
         async function init() {
             try {
-                const response = await fetch('data.csv');
+                const response = await fetch('survey(7).csv');
                 if (response.ok) {
                     const text = await response.text();
                     processData(text);
